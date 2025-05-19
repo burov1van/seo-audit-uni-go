@@ -1,0 +1,61 @@
+.slide.howitworks,
+.slide.howitworks * {
+  box-sizing: border-box;
+}
+
+.slide.howitworks {
+  position: relative;
+  width: 1122px;
+  height: 794px;
+  padding: var(--spacing-xl);
+  background: var(--c-bg);
+
+  font-family: 'Manrope', Arial, sans-serif;
+  color: var(--c-text-sub);
+  overflow: hidden;
+}
+
+.howitworks__title {
+  margin: 0 0 210px;
+  font-size: var(--title-size);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: var(--c-text-main);
+}
+
+.howitworks__list {
+  counter-reset: step;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(210px, 1fr));
+  grid-auto-rows: 180px;
+  gap: var(--spacing-lg) var(--spacing-xl);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: calc(100% - var(--title-size) - var(--spacing-lg));
+}
+
+.howitworks__item {
+  counter-increment: step;
+  padding-left: 32px;
+  font-size: 16px;
+  line-height: 1.45;
+  max-width: 260px;
+  text-wrap: balance;
+}
+
+.howitworks__item-title {
+  position: relative;
+  margin: 0 auto;
+}
+
+.howitworks__item-title::before {
+  content: '(' counter(step) ')';
+  position: absolute;
+  left: -32px;
+  top: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-accent);
+}
