@@ -1,74 +1,84 @@
-import { useState, useEffect } from 'react';
-import { useData } from '../DataContext';      // ← хук контекста
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { forecastSchema } from '../forecastSchema'; // ← только schema
+import { useKPStore, selectForecast } from '../kpStore';
 import '../style/ForecastForm.css';
 
 export default function ForecastForm() {
-  /* читаем глобальные данные и функцию-обновление */
-  const { forecast, setForecast } = useData();
+  /* данные из стора */
+  const forecast = useKPStore(selectForecast);
+  const saveForecast = useKPStore((s) => s.saveCurrentForecast);
 
-  /* локальная копия для редактирования */
-  const [local, setLocal] = useState(forecast);
+  /* react-hook-form + zod */
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty },
+  } = useForm({
+    resolver: zodResolver(forecastSchema),
+    defaultValues: {
+      ...forecast,
+      keywords: (forecast.keywords || []).join('\n'),
+    },
+  });
 
-  /* если глобальные данные изменились где-то ещё, синхронизируемся */
-  useEffect(() => setLocal(forecast), [forecast]);
+  /* если пользователь переключил КП → сбрасываем форму */
+  useEffect(() => {
+    reset({
+      ...forecast,
+      keywords: (forecast.keywords || []).join('\n'),
+    });
+  }, [forecast, reset]);
 
-  /* обновляем локальное состояние по мере ввода */
-  const handle = (field) => (e) => {
-    const raw = e.target.value;
-    const value = field === 'keywords' ? raw : raw.trim();
-
-    setLocal((prev) => ({
-      ...prev,
-      [field]: value,
-      ...(field === 'keywords' && {
-        keywords: value.split('\n').filter(Boolean),
-      }),
-    }));
-  };
-
-  /* по клику «Применить» кладём локальные правки в контекст */
-  const applyChanges = (e) => {
-    e.preventDefault();      // не перезагружаем страницу
-    setForecast(local);      // ← сохраняем
+  /* отправка */
+  const onSubmit = (data) => {
+    saveForecast({
+      ...data,
+      keywords: data.keywords.split('\n').filter(Boolean),
+    });
   };
 
   return (
-    <form className="forecast-form" onSubmit={applyChanges}>
+    <form className="forecast-form" onSubmit={handleSubmit(onSubmit)}>
       <label>
         Регион&nbsp;продвижения
-        <input value={local.region ?? ''} onChange={handle('region')} />
+        <input {...register('region')} />
+        {errors.region && <span className="err">{errors.region.message}</span>}
       </label>
 
       <label>
         URL&nbsp;сайта
-        <input value={local.url ?? ''} onChange={handle('url')} />
+        <input {...register('url')} />
+        {errors.url && <span className="err">{errors.url.message}</span>}
       </label>
 
       <label>
         Прогноз&nbsp;переходов
-        <input value={local.clicks ?? ''} onChange={handle('clicks')} />
+        <input {...register('clicks')} />
+        {errors.clicks && <span className="err">{errors.clicks.message}</span>}
       </label>
 
       <label>
         Прогноз&nbsp;лидов
-        <input value={local.leads ?? ''} onChange={handle('leads')} />
+        <input {...register('leads')} />
+        {errors.leads && <span className="err">{errors.leads.message}</span>}
       </label>
 
       <label>
-        Стоимость
-        <input value={local.cost ?? ''} onChange={handle('cost')} />
+        Стоимость&nbsp;(₽)
+        <input {...register('cost')} />
+        {errors.cost && <span className="err">{errors.cost.message}</span>}
       </label>
 
       <label>
         Ключевые&nbsp;фразы (каждая с новой строки)
-        <textarea
-          rows={6}
-          value={(local.keywords || []).join('\n')}
-          onChange={handle('keywords')}
-        />
+        <textarea rows={6} {...register('keywords')} />
+        {errors.keywords && <span className="err">{errors.keywords.message}</span>}
       </label>
 
-      <button type="submit" className="forecast-form__apply">
+      <button type="submit" className="forecast-form__apply" disabled={!isDirty}>
         Применить
       </button>
     </form>

@@ -1,8 +1,8 @@
 import '../style/ForecastDisplay.css';
-import { useData } from '../DataContext';
+import { useKPStore, selectForecast } from '../kpStore';
 
 export default function ForecastDisplay() {
-  const { forecast } = useData();                       // ⬅ берём из контекста
+  const forecast = useKPStore(selectForecast);
 
   return (
     <section className="slide forecast">

@@ -1,17 +1,16 @@
 import '../style/About.css';
 import '../style/variables.css';
-import { useData } from '../DataContext';
+import { useKPStore, selectForecast } from '../kpStore';
 
 export default function About() {
+  const url = useKPStore((s) => selectForecast(s).url);
 
-  const { forecast } = useData();
   return (
     <section className="slide about">
-      {/* Заголовок презентации */}
       <div className="about__header">
         <h1 className="about__title">Коммерческое предложение</h1>
         <p className="about__subtitle">
-          Услуга «SEO TOP 10» для сайта <strong>{forecast.url}</strong>
+          Услуга «SEO TOP 10» для сайта <strong>{url}</strong>
         </p>
       </div>
 
