@@ -1,6 +1,7 @@
 // src/components/KPManager.jsx
 import { useKPStore } from '../kpStore';
 import { selectCurrent } from '../kpStore';
+import "../style/KPManager.css"
 
 export default function KPManager() {
   const { kps, currentId, addKP, loadKP, deleteKP } = useKPStore();

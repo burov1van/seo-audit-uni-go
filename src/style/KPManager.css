@@ -1,0 +1,57 @@
+/* Базовые стили для контейнера KPManager */
+.kp-manager {
+    display: flex; /* Используем Flexbox для выравнивания элементов */
+    gap: var(--spacing-sm); /* Отступ между элементами */
+    align-items: center; /* Выравниваем элементы по центру по вертикали */
+    padding: var(--spacing-md) var(--spacing-xl); /* Внутренние отступы */
+    background: var(--c-bg); /* Цвет фона из переменных */
+    font-family: 'Manrope', Arial, sans-serif; /* Шрифт из переменных */
+    color: var(--c-text-main); /* Цвет текста из переменных */
+    width: 1122px; /* Фиксированная ширина, как у других слайдов */
+    box-sizing: border-box; /* Важно для правильного расчета размеров */
+  }
+  
+  /* Стили для выпадающего списка (select) */
+  .kp-manager select {
+    flex: 1; /* Позволяет select занимать доступное пространство */
+    padding: 8px 12px; /* Внутренние отступы */
+    border: 1px solid var(--c-border); /* Граница из переменных */
+    border-radius: 4px; /* Закругленные углы */
+    background: var(--c-bg); /* Фон */
+    color: var(--c-text-main); /* Цвет текста */
+    font-size: 16px; /* Размер шрифта */
+    line-height: 1.35; /* Межстрочный интервал */
+    font-family: 'Manrope', Arial, sans-serif; /* Шрифт */
+    cursor: pointer; /* Курсор при наведении */
+    outline: none; /* Убираем стандартную обводку при фокусе */
+  }
+  
+  .kp-manager select:focus {
+    border-color: var(--c-accent); /* Цвет границы при фокусе */
+  }
+  
+  /* Стили для кнопок */
+  .kp-manager button {
+    padding: 8px 16px; /* Внутренние отступы */
+    font-size: 16px; /* Размер шрифта */
+    font-weight: 700; /* Жирность шрифта */
+    color: #fff; /* Белый текст */
+    background: var(--c-text-main); /* Основной цвет текста как фон кнопки */
+    border: none; /* Убираем стандартную границу */
+    border-radius: 4px; /* Закругленные углы */
+    cursor: pointer; /* Курсор при наведении */
+    transition: opacity 0.2s ease; /* Плавный переход для эффектов */
+  }
+  
+  .kp-manager button:hover {
+    opacity: 0.85; /* Небольшая прозрачность при наведении */
+  }
+  
+  .kp-manager button:active {
+    opacity: 0.7; /* Большая прозрачность при нажатии */
+  }
+  
+  .kp-manager button:disabled {
+    opacity: 0.5; /* Уменьшаем прозрачность для отключенных кнопок */
+    cursor: not-allowed; /* Курсор "запрещено" */
+  }
